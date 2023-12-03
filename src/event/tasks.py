@@ -1,9 +1,10 @@
 from typing import Any
 
-from celery import shared_task
-from event.models import Event, Weather
-from django.conf import settings
 import requests
+from celery import shared_task
+from django.conf import settings
+
+from event.models import Event, Weather
 
 
 @shared_task
@@ -25,7 +26,7 @@ def get_weather_for_coordinate(lat: float, lon: float) -> dict[str, Any]:
     if response.status_code == 200:
         return response.json()
     else:
-        raise Exception(f"Failed to fetch weather data: {response.status_code}")
+        raise Exception(f'Failed to fetch weather data: {response.status_code}')
 
 
 def update_or_create_weather(coordinate, weather_data: dict[str, Any]) -> None:

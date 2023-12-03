@@ -1,5 +1,5 @@
-API_REQUEST = "ENDPOINT: {url}. HEADERS: {headers}. PARAMS: {params}. "
-API_NOT_AVALIABLE = API_REQUEST + "API not avaliable " + "ERROR: {error}."
-STATUS_CODE_ERROR = API_REQUEST + "Unexpected return code: {status_code}."
-NO_INFORMATION = "-"
-KEY_ERROR = API_REQUEST + "KEY {key} no in json."
+API_REQUEST = 'ENDPOINT: {url}. HEADERS: {headers}. PARAMS: {params}. '
+API_NOT_AVALIABLE = API_REQUEST + 'API not avaliable ' + 'ERROR: {error}.'
+STATUS_CODE_ERROR = API_REQUEST + 'Unexpected return code: {status_code}.'
+NO_INFORMATION = '-'
+KEY_ERROR = API_REQUEST + 'KEY {key} no in json.'

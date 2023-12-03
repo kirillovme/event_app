@@ -1,7 +1,7 @@
 from datetime import date
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 
 class Coordinate(models.Model):
@@ -11,7 +11,7 @@ class Coordinate(models.Model):
     longitude = models.FloatField(db_index=True)
 
     def __str__(self):
-        return f"Latitude: {self.latitude}, Longitude: {self.longitude}"
+        return f'Latitude: {self.latitude}, Longitude: {self.longitude}'
 
 
 class Event(models.Model):
@@ -43,4 +43,4 @@ class Weather(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Weather in {self.coordinate}"
+        return f'Weather in {self.coordinate}'

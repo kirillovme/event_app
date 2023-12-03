@@ -1,11 +1,12 @@
-from django.test import TestCase
-from django.test import Client, AsyncClient
-from django.urls import reverse
-from event.models import Coordinate, Event, Weather
-from django.contrib.auth.models import User
-from unittest.mock import patch
-from datetime import date
 from collections import namedtuple
+from datetime import date
+from unittest.mock import patch
+
+from django.contrib.auth.models import User
+from django.test import AsyncClient, Client, TestCase
+from django.urls import reverse
+
+from event.models import Coordinate, Event, Weather
 
 MockWeatherData = namedtuple('MockWeatherData', ['temp', 'humidity'])
 
@@ -73,7 +74,7 @@ class EventViewTests(TestCase):
 
     def test_edit_event_get_unauthorized(self):
         """Тест на перенаправление при попытке редактирования события неавторизованным пользователем."""
-        another_user = User.objects.create_user(username='anotheruser', password='12345')
+        User.objects.create_user(username='anotheruser', password='12345')
         self.client.login(username='anotheruser', password='12345')
         url = reverse('edit_event', args=[self.event.id])
         response = self.client.get(url)
@@ -84,7 +85,7 @@ class EventViewTests(TestCase):
         url = reverse('edit_event', args=[self.event.id])
         data = {'latitude': 50, 'longitude': 60, 'title': 'Updated Event', 'description': 'Updated Description',
                 'start_date': date.today(), 'end_date': date.today()}
-        response = self.client.post(url, data)
+        self.client.post(url, data)
         self.event.refresh_from_db()
         self.assertEqual(self.event.title, 'Updated Event')
 

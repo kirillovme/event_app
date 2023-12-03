@@ -1,6 +1,10 @@
-from infrastructure.gateways.api.api_constants import WEATHER_API_KEY, WEATHER_API_TOKEN, WEATHER_API_URL
-from infrastructure.gateways.api.base_async_client import BaseAsyncClient
 from event.schemas import WeatherSchema
+from infrastructure.gateways.api.api_constants import (
+    WEATHER_API_KEY,
+    WEATHER_API_TOKEN,
+    WEATHER_API_URL,
+)
+from infrastructure.gateways.api.base_async_client import BaseAsyncClient
 
 
 class WeatherAsyncClient(BaseAsyncClient):

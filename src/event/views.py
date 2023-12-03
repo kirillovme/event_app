@@ -1,12 +1,13 @@
-from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
-from django.shortcuts import render, redirect, reverse
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render, reverse
+
 from event.forms import EventForm
 from event.models import Coordinate, Event, Weather
-from django.contrib.auth.decorators import login_required
 from infrastructure.gateways.api.weather_api_client import weather_async_client
-from infrastructure.utils.async_login_decorator import async_login_required
 from infrastructure.gateways.redis.redis_client import redis_client
-from django.conf import settings
+from infrastructure.utils.async_login_decorator import async_login_required
 
 
 @login_required(login_url='/login')

@@ -1,7 +1,8 @@
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect, reverse
-from user.forms import RegisterForm
 from django.contrib.auth import login
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect, render, reverse
+
+from user.forms import RegisterForm
 
 
 def home(request: HttpRequest) -> HttpResponse:
