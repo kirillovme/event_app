@@ -1,0 +1,30 @@
+{% extends 'user/base.html' %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<div class="container my-4">
+    <div class="text-center">
+        <h2>Welcome to Our Event Tracker</h2>
+        <p>Organize your events effortlessly and stay updated with the latest weather forecasts.</p>
+    </div>
+    <div class="my-5">
+        <h3>Features at a Glance:</h3>
+        <ul>
+            <li>Track and manage your events with ease.</li>
+            <li>Get real-time weather updates for your event locations.</li>
+        </ul>
+    </div>
+    <div class="my-5">
+        <h3>Getting Started:</h3>
+        <p>Start by creating your event, and we'll handle the rest. Our system will automatically update you with the latest weather forecasts for your event locations, helping you plan better.</p>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="text-center mt-5">
+        <a href="{% url 'get_events' %}" class="btn btn-success">Go view new events!</a>
+    </div>
+    {% else %}
+    <div class="text-center mt-5">
+        <a href="{% url 'sign_up' %}" class="btn btn-success">Register and start your events planning!</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

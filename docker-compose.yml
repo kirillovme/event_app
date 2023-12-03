@@ -1,0 +1,140 @@
+version: '3.8'
+
+services:
+
+  web:
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+    restart: always
+    container_name: web
+    command: ["./entrypoint.sh", "web"]
+    volumes:
+      - weather_app_static_value:/app/web-static/
+      - weather_app_media_value:/app/web-media/
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    container_name: db
+    ports:
+      - "5432:5432"
+    volumes:
+      - weather_app_pgdata:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 80s
+
+  redis:
+    image: "redis:alpine"
+    restart: always
+    container_name: redis
+    volumes:
+      - weather_app_redis_data:/data
+    expose:
+      - "6379"
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 80s
+
+  celery_worker:
+      build:
+        context: .
+        dockerfile: ./src/Dockerfile
+      container_name: celery_worker
+      command: ["./entrypoint.sh", "worker"]
+      depends_on:
+        - web
+        - db
+        - redis
+      env_file:
+      - .env
+
+  celery_beat:
+      build:
+        context: .
+        dockerfile: ./src/Dockerfile
+      container_name: celery_beat
+      command: ["./entrypoint.sh", "beat"]
+      depends_on:
+        - web
+        - db
+        - redis
+      env_file:
+      - .env
+
+  flower:
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+    env_file:
+      - .env
+    container_name: flower_app
+    command: ["./entrypoint.sh", "flower"]
+    depends_on:
+      - redis
+      - celery_beat
+      - celery_worker
+    ports:
+      - "5555:5555"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus_data/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+
+volumes:
+  weather_app_pgdata:
+    name: weather_app_pgdata
+  weather_app_static_value:
+    name: weather_app_static_value
+  weather_app_media_value:
+    name: weather_app_media_value
+  weather_app_redis_data:
+    name: weather_app_redis_data
+  prometheus_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./prometheus_data
+  grafana_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./grafana_data

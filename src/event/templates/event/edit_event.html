@@ -1,0 +1,8 @@
+{% extends 'user/base.html' %} {% block title %}Create a Event{% endblock %}
+{% load crispy_forms_tags %} {% block content %}
+<form method="post">
+  {% csrf_token %}{{form|crispy}}
+  <button type="submit" class="btn btn-success">Update</button>
+  <a href="{% url 'get_events' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
