@@ -19,6 +19,9 @@ This project is a simple event manager. Organize your events effortlessly and st
 - Docker and Docker Compose installed
 - GNU Make (https://www.gnu.org/software/make/)
 
+### Demo:
+[![Alt text for your video](https://nihot.nl/wp/wp-content/uploads/2017/02/YouTube-click-here.png)](https://youtu.be/gLDd0n_yaUc)
+
 ### Instructions:
 1. Clone the repository
    ```bash
